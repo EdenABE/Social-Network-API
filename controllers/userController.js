@@ -1,6 +1,7 @@
-const { User, Application } = require('../models');
 
-module.exports = {
+const { User, Thought } = require('../models');
+
+const userController = {
   // Get all users
   getUsers(req, res) {
     User.find()
@@ -30,9 +31,10 @@ module.exports = {
       .then((user) =>
         !user
           ? res.status(404).json({ message: 'No user with that ID' })
-          : Application.deleteMany({ _id: { $in: user.applications } })
+          : Thought.deleteMany({ _id: { $in: user.thought } })
       )
-      .then(() => res.json({ message: 'User and associated apps deleted!' }))
+      .then(() => res.json({ message: 'User and associated thought deleted!' }))
       .catch((err) => res.status(500).json(err));
   },
 };
+module.exports=userController
