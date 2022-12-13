@@ -24,7 +24,7 @@ const thoughtController= {
       .catch((err) => {
         res.status(500).json(err);
   });
-}
+},
   // Creates a new Thought. Accepts a request body with the entire thought object.
   // Because thoughts are associated with Users, we then update the User who created the thought and add the ID of the thought to the thought array
 createThought (req, res) {
@@ -87,8 +87,9 @@ createThought (req, res) {
               message: 'Thought created but no user with this id!' });
             }
           res.json({ message: 'Thought successfully deleted!' });
-          });
-      .catch((err) => res.status(500).json(err);
+          })
+      .catch((err) => {
+        res.status(500).json(err);
   });
 },
 

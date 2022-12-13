@@ -25,6 +25,29 @@ const userController = {
       .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
   },
+//update user
+  updateUser(req, res) {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      {
+        $set: req.body,
+      },
+      {
+        runValidators: true,
+        new: true,
+      }
+    )
+      .then((dbUserData) => {
+        if (!dbUserData) {
+          return res.status(404).json({ message: 'No user with this id!' });
+        }
+        res.json(dbUserData);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  },
   // Delete a user and associated apps
   deleteUser(req, res) {
     User.findOneAndDelete({ _id: req.params.userId })
@@ -36,6 +59,33 @@ const userController = {
       .then(() => res.json({ message: 'User and associated thought deleted!' }))
       .catch((err) => res.status(500).json(err));
   },
+
+  addFriend(req, res) {
+    User.findOneAndUpdate({ _id: req.params.userId }, { $addToSet: { friends: req.params.friendId } }, { new: true })
+      .then((user) => {
+        if (!user) {
+          return res.status(404).json({ message: 'No user with this id!' });
+        }
+        res.json(user);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  },
+  // remove friend from friend list
+  removeFriend(req, res) {
+    User.findOneAndUpdate({ _id: req.params.userId }, { $pull: { friends: req.params.friendId } }, { new: true })
+      .then((user) => {
+        if (!user) {
+          return res.status(404).json({ message: 'No user with this id!' });
+        }
+        res.json(user);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  },
 };
 module.exports=userController
-
